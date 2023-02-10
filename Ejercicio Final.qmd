@@ -1,0 +1,109 @@
+---
+title: "Ejercicio Final"
+author: "Laura Chaparro"
+format: docx
+editor: visual
+---
+
+```{r}
+#| warning: false
+#| message : false
+#| results : false
+library(tidyverse)
+library(palmerpenguins)
+#data(package = 'palmerpenguins')
+penguins <- palmerpenguins::penguins
+str(penguins)
+summary(penguins)
+
+```
+
+# Punto 1
+
+### Numero de indivios `r length(penguins$species)`
+
+Media y Desviación estandar de la profundidad del pico
+
+```{r}
+#| message: true
+#| error: true
+table(penguins$species, penguins$sex)
+penguins <- penguins |>
+  na.omit()
+billdepth <- penguins |>
+  group_by(species) |>
+  summarise(mean_bill_depth_mm = mean(bill_depth_mm),
+            sd_bill_depth_mm = sd(bill_depth_mm),
+            min_bill_depth_mm = min(bill_depth_mm),
+            max_bill_depth_mm = max(bill_depth_mm))
+
+billdepth
+
+```
+
+## Media y Desviación de la longitud de la la aleta
+
+```{r}
+#| message: false
+#| error: false
+
+flipper <- penguins |>
+  group_by(species) |>
+  summarise(mean_flipper_length_mm = mean(flipper_length_mm),
+            sd_flipper_length_mm = sd(flipper_length_mm), 
+            min_flipper_length_mm = min(flipper_length_mm),
+            max_flipper_length_mm = max(flipper_length_mm))
+
+flipper
+
+```
+
+## Media y Desviacion estandar del tamaño
+
+```{r}
+#| warning: false
+#| message: false
+#| error: false
+bodymass <- penguins |>
+  group_by(species) |>
+  summarise(mean_body_mass_g = mean(body_mass_g),
+            sd_body_mass_g = sd(body_mass_g),
+            min_body_mass_g = min(body_mass_g),
+            max_body_mass_g = max(body_mass_g))
+
+bodymass
+
+```
+
+# Punto 2
+
+```{r}
+#| warning: false
+#| message: false
+ggplot(data = penguins, aes(x = island, fill = species)) +
+         geom_bar() + 
+         scale_fill_manual(values = c("orange", "purple", "blue"))
+```
+
+#### ¿qué especie se ha muestreado en las tres islas? ***Adaline***
+
+#### ¿cuántos individuos se han muestreado de la isla Dream? ***123***
+
+# Punto 3
+
+```{r}
+#| warning: false
+#| message: false
+
+ggplot(data = penguins)+
+  geom_boxplot(aes(x = species, y = body_mass_g, fill = sex ))
+
+```
+
+#### ¿qué especie tiene mayor tamaño?
+
+*La especie con un mayor tamaño es Gentoo*.
+
+#### **¿en qué especie las hembras y los machos tienen un tamaño más similar?**
+
+*La especie Chinstrap el tamaño de las hembras y de los machos es similar.*
